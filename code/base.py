@@ -11,3 +11,7 @@ def url_to_str(url):
 
 def str_to_htm(s):
 	return etree.HTML(s)
+
+
+def url_to_htm(url):
+	return str_to_htm(url_to_str(url))
