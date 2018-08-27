@@ -2,10 +2,11 @@ import os
 import requests
 from lxml import etree
 from bs4 import BeautifulSoup
+user_agent = 'Mozilla/5.0'
 
 
 def url_to_soup(url):
-	html = requests.get(url, headers={'User-agent': 'Chrome/63.0.3239.108'})
+	html = requests.get(url, headers={'User-agent': user_agent})
 	return BeautifulSoup(html.text, 'lxml')
 
 
@@ -39,7 +40,7 @@ def download(url):
 	address = path + '\\' + find_file_name(url)
 	if os.path.exists(address):
 		raise FileExistsError
-	obj = requests.get(url, headers={'User-agent': 'Chrome/63.0.3239.108'})
+	obj = requests.get(url, headers={'User-agent': user_agent})
 	if obj.status_code == 403:
 		raise ConnectionRefusedError
 	elif obj.status_code != 200:
