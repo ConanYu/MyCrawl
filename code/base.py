@@ -4,9 +4,13 @@ from lxml import etree
 from bs4 import BeautifulSoup
 
 
+def url_to_soup(url):
+	html = requests.get(url, headers={'User-agent': 'Chrome/63.0.3239.108'})
+	return BeautifulSoup(html.text, 'lxml')
+
+
 def url_to_str(url):
-	html = requests.get(url, headers={'User-agent': 'Mozilla/5.0'})
-	soup = BeautifulSoup(html.text, 'lxml')
+	soup = url_to_soup(url)
 	return soup.prettify()
 
 
