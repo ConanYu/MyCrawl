@@ -17,15 +17,15 @@ def url_to_htm(url):
 	return str_to_htm(url_to_str(url))
 
 
-path = os.getcwd() + '\\download'
-
-
 def find_file_name(url):
 	pos = 0
 	for i, j in enumerate(url):
 		if j == '/':
 			pos = i
 	return url[pos:]
+
+
+path = os.getcwd() + '\\download'
 
 
 def download(url):
