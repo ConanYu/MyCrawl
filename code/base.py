@@ -39,5 +39,11 @@ def download(url):
 	address = path + '\\' + find_file_name(url)
 	if os.path.exists(address):
 		raise FileExistsError
+	obj = requests.get(url, headers={'User-agent': 'Chrome/63.0.3239.108'})
+	if obj.status_code == 403:
+		raise ConnectionRefusedError
+	elif obj.status_code != 200:
+		raise ConnectionError
 	with open(address, 'wb') as f:
-		f.write(requests.get(url, headers={'User-agent': 'Mozilla/5.0'}).content)
+		f.write(obj.content)
+
