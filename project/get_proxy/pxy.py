@@ -37,3 +37,8 @@ def get_proxy():
 		[j.extract() for j in i.find_all(attrs={'style': 'display:none;'})]
 		ret.append(find(i.prettify()))
 	return ret
+
+
+if __name__ == '__main__':
+	arr = get_proxy()
+	print(arr)
