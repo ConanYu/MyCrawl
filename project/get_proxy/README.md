@@ -29,5 +29,5 @@ span style="display:inline-block;">6</span>
 <span class="port GEA">8105</span>
 </td>
 ```
-- 然后将所有的标签属性style为'display: none'的去掉再将所有的text()混合即可
+- 然后将所有的标签属性style为display: none的去掉再将所有的text()混合即可
 - 难点在于这里的标签有div、span和p三者混合且会出现冗余的数据而这些情况出现的位置是随机的
