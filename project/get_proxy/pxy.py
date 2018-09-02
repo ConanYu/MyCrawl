@@ -5,10 +5,14 @@ user_agent = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, lik
 URL = 'http://www.goubanjia.com/'
 
 
-def url_to_soup(url):
+def url_to_soup(url, f=False):
 	html = requests.get(url, headers={'User-agent': user_agent})
+	# if wrong then try again
 	if html.status_code != 200:
-		raise ConnectionError(URL)
+		if not f:
+			return url_to_soup(url, True)
+		else:
+			raise ConnectionError(URL + ' status code: ' + str(html.status_code))
 	return BeautifulSoup(html.text, 'lxml')
 
 
