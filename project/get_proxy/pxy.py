@@ -9,7 +9,8 @@ def url_to_soup(url, proxy=None, f=False):
 	header = {'User-agent': user_agent}
 	if proxy != None:
 		header['proxy'] = proxy
-	html = requests.get(url, headers={'User-agent': user_agent})
+	html = requests.get(url, headers=header)
+	# if wrong then try again
 	if html.status_code != 200:
 		if not f:
 			return url_to_soup(url, True)
