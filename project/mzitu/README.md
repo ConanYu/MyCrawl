@@ -1,5 +1,9 @@
-#### 取自链接： [http://www.mzitu.com](https://www.mzitu.com)
+#### 取自链接： [http://www.mzitu.com](http://www.mzitu.com)
 #### 时间：2018-09-02
+## 方法
+- 在链接后从1开始枚举然后对其网页进行解析爬取
+- 例如：解析 [http://www.mzitu.com/1](http://www.mzitu.com/1) 后找到其图片链接进行下载然后进行下一个url
+- 这样可能会出现重复的，但暂时（懒）没有找到方法去解决。
 ## 总结
 - 下载文件时需要在header中加入referer否则会出现403的错误
 - 下载时有可能出现各种各样的情况而导致status_code不为200，这时我将进行二次下载如果还是不成功则抛出错误再解决
