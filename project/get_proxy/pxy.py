@@ -7,7 +7,7 @@ URL = 'http://www.goubanjia.com/'
 
 def url_to_soup(url, proxy=None, f=False):
 	header = {'User-agent': user_agent}
-	if proxy != None:
+	if proxy is not None:
 		header['proxy'] = proxy
 	html = requests.get(url, headers=header)
 	# if wrong then try again
