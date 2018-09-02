@@ -5,9 +5,11 @@ user_agent = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, lik
 URL = 'http://www.goubanjia.com/'
 
 
-def url_to_soup(url, f=False):
+def url_to_soup(url, proxy=None, f=False):
+	header = {'User-agent': user_agent}
+	if proxy != None:
+		header['proxy'] = proxy
 	html = requests.get(url, headers={'User-agent': user_agent})
-	# if wrong then try again
 	if html.status_code != 200:
 		if not f:
 			return url_to_soup(url, True)
@@ -33,8 +35,9 @@ def find(html):
 	return ret
 
 
-def get_proxy():
-	arr = url_to_soup(URL).find_all(name='td', attrs={'class': 'ip'})
+def get_proxy(proxy=None):
+	# we can use proxy to get proxies.
+	arr = url_to_soup(URL, proxy).find_all(name='td', attrs={'class': 'ip'})
 	ret = []
 	for i in arr:
 		[j.extract() for j in i.find_all(attrs={'style': 'display: none;'})]
@@ -44,5 +47,7 @@ def get_proxy():
 
 
 if __name__ == '__main__':
+	import random
 	arr = get_proxy()
+	arr = get_proxy(random.sample(arr, 1)[0])
 	print(arr)
