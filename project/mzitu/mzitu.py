@@ -44,7 +44,7 @@ def clear_dir(obj):
 
 
 # where you want to download to
-path = 'D:\\mzitu'
+path = os.getcwd()
 def download(url, title, referer, f=False):
 	# use the title to classify the stuff you download
 	cpath = path + '\\' + title
