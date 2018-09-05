@@ -16,17 +16,20 @@ def url_to_str(url, times=0):
 	I will give ten chances to you.
 	If you fail still, I..I will cry.
 	"""
-	if times >= 10:
-		raise ConnectionError(url)
 	global proxy
 	try:
 		html = requests.get(url, headers={'User-agent': user_agent, 'proxies': random.sample(proxy, 1)[0]})
 		if html.status_code != 200:
 			raise ConnectionError(url)
 		return html.text
-	except Exception:
+	except Exception as e:
+		if times >= 10:
+			raise e
 		time.sleep(1)
-		proxy = get_proxy(random.sample(proxy, 1)[0])
+		try:
+			proxy = get_proxy(random.sample(proxy, 1)[0])
+		except Exception:
+			pass
 		return url_to_str(url, times + 1)
 
 
@@ -118,8 +121,8 @@ def check(html):
 
 path = os.getcwd() + '\\codeforces_ratings_data\\'
 # prevent unrated contest
-st = set(['1017', '874'])
-# st = {'1017', '874'}
+st = {'1017', '874', '826'}
+# ost = {'889', '890', '887', '825'}
 def main():
 	cnt = 0
 	contestid = get_last_page()
@@ -148,11 +151,28 @@ def main():
 				who += get_change_who(html)
 				rate += get_change_rate(html)
 				print(k)
+			# prevent unrated contest
+			if len(who) == 0 and len(rate) == 0:
+				print('unrated at ' + idx[j])
+				continue
+			# prevent from banned web
+			if len(who) != len(rate):
+				print('Been banned at ' + idx[j])
+				continue
 			with open(address, 'w', encoding='gbk', newline='') as csvfile:
 				writer = csv.writer(csvfile)
 				for k in range(len(who)):
 					writer.writerow([who[k], rate[k]])
 			print(address + ' has done!')
+
+
+# 自闭中
+def do():
+	try:
+		main()
+	except Exception:
+		time.sleep(60)
+		do()
 
 
 main()
