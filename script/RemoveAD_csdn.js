@@ -7,6 +7,7 @@
 // @match        *://*.csdn.net/*
 // @grant        none
 // ==/UserScript==
+// 然而还是建议AdBlock
 
 (function () {
     var ad1 = document.getElementsByClassName("csdn-tracking-statistics mb8 box-shadow");
