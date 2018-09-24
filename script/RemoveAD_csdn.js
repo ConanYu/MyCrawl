@@ -1,3 +1,13 @@
+// ==UserScript==
+// @name         去除csdn的广告
+// @namespace    http://tampermonkey.net/
+// @version      0.4
+// @description  remove ads!
+// @author       ConanYu
+// @match        *://*.csdn.net/*
+// @grant        none
+// ==/UserScript==
+
 (function () {
     var ad1 = document.getElementsByClassName("csdn-tracking-statistics mb8 box-shadow");
     var ad2 = document.getElementsByClassName("pulllog-box");
