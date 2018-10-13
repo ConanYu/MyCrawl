@@ -1,10 +1,10 @@
 import os
 import time
+from getpass import getpass
 import requests
 from lxml import etree
 import selenium
 from selenium import webdriver
-from selenium.webdriver.support.ui import Select
 robot, session = None, None
 
 def todo(url, operator, **kw):
@@ -29,17 +29,24 @@ def operator_login(kw):
 def operator_makefriend(kw):
     global robot
     # url = 'http://codeforces.com/profile/用户名'
-    try:
-        robot.find_element_by_xpath('//*[@id="pageContent"]/div[2]/div[5]/div[2]/div/h1/img[@class="addFriend friendStar" or class="friendStar addFriend"]').click()
-    except selenium.common.exceptions.NoSuchElementException:
-        return
+    robot.find_element_by_xpath('//*[@id="pageContent"]/div[2]/div[5]/div[2]/div/h1/img[@class="addFriend friendStar" or class="friendStar addFriend"]').click()
+    
+def makefriend(username, password, friends):
+    if isinstance(friends, str):
+        friends = [friends]
+    todo('http://codeforces.com/enter', operator_login, username=username, password=password)
+    time.sleep(4.0)
+    for i in friends:
+        try:
+            todo('http://codeforces.com/profile/' + i, operator_makefriend)
+        except selenium.common.exceptions.NoSuchElementException:
+            print(i + ' 添加失败。')
 
 if __name__ == '__main__':
-    lis = ['Caproner', 'Blogggggg', 'DumplingMew', 'ConanYu', 'Fushicho-XF', 'Canan', 'AII', 'qq897276651', 'SeeeIsAHandsomeBoy', 'Seven0x29a', 'MoogleAndChocobo', 'Se7en0x29a', 'lightyears1998', 'MoogleAndChocobo_', 'xiaokai666666', 'Huang_Shaofeng', 'JonsonBen', 'Gragon_Shao']
-    # use getlist_organization
-    lis += ['SemonIsAHandsomeBoy', 'Kurisuzzz', 'Archer_x', 'Markfound']
-
-    todo('http://codeforces.com/enter', operator_login, username='Your username', password='Your password')
-    time.sleep(4.0)
-    for i in lis:
-        todo('http://codeforces.com/profile/' + i, operator_makefriend)
+    username = input('输入用户名； ')
+    password = getpass('输入密码： ')
+    n = int(input('你要添加几个朋友？ '))
+    lis = []
+    for i in range(1, n + 1):
+        lis.append(input('输入第%d个朋友的用户名： ' % i))
+    makefriend(username, password, lis)
