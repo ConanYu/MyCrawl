@@ -10,6 +10,7 @@ def todo(url, operator, **kw):
     if robot is None or session is None:
         robot = webdriver.Chrome(executable_path=r'D:\Desktop\chromedriver.exe')
         session = requests.Session()
+        robot.implicitly_wait(2.0)
     robot.get(url)
     operator(kw)
     cookies = robot.get_cookies()
