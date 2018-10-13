@@ -4,7 +4,7 @@ import requests
 from lxml import etree
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
-robot = webdriver.Chrome(executable_path=r'D:\Desktop\CTF\chromedriver.exe')
+robot = webdriver.Chrome(executable_path=r'D:\Desktop\chromedriver.exe')
 session = requests.Session()
 submit_data = {'Problem': '1000', 'Language': 2, 'Code': ''}
 # head
