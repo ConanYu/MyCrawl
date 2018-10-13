@@ -48,7 +48,7 @@ int main()
 '''
 
 if __name__ == '__main__':
-    todo('http://172.22.27.1', operator_login, username='1706300092', password='12345679')
+    todo('http://172.22.27.1', operator_login, username='Your username', password='Your password')
     for i in range(2):
         todo('http://172.22.27.1/submit', operator_submit, problem='1000', lang='2', code=CODE)
         time.sleep(0.5)
