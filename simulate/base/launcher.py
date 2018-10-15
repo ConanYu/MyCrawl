@@ -13,3 +13,4 @@ def todo(url, operator, **kw):
     cookies = robot.get_cookies()
     for cookie in cookies:
         session.cookies.set(cookie['name'], cookie['value'])
+    return robot.command_executor._url, robot.session_id
