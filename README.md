@@ -11,8 +11,8 @@
 
 | 名称 | 时间 |
 |-|-|
-| GzhuOJ模拟登陆并上传代码 | 2018-10-12 |
-| Codeforces一键makefriends | 2018-10-13 |
+| [GzhuOJ模拟登陆并上传代码](https://github.com/ConanYu/MyCrawl/tree/master/simulate/GzhuOJ) | 2018-10-12 |
+| [Codeforces一键makefriends](https://github.com/ConanYu/MyCrawl/tree/master/simulate/codeforces) | 2018-10-13 |
  
 #
 > 喜欢的话就坚持吧。
