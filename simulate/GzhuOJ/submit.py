@@ -1,23 +1,7 @@
-import os
+import SimuateAPI
 import time
-import requests
-from selenium import webdriver
+import json
 from selenium.webdriver.support.ui import Select
-robot, session = None, None
-
-def todo(url, operator, **kw):
-    global robot, session
-    if robot is None or session is None:
-        robot = webdriver.Chrome(executable_path=r'D:\Desktop\chromedriver.exe')
-        session = requests.Session()
-        robot.implicitly_wait(2.0)
-    robot.get(url)
-    operator(kw)
-    cookies = robot.get_cookies()
-    for cookie in cookies:
-        session.cookies.set(cookie['name'], cookie['value'])
-
-# ************************************************** HEAD ************************************************** #
 
 def operator_login(kw):
     # url: http://172.22.27.1/
@@ -35,21 +19,11 @@ def operator_submit(kw):
     robot.find_element_by_xpath('//*[@id="code"]').send_keys(kw['code'])
     robot.find_element_by_xpath('//*[@id="submit"]').click()
 
-CODE = r'''
-#include<iostream>
-using namespace std;
-int main()
-{
-    int a, b;
-    while(cin >> a >> b)
-    {
-        cout << (a + b) << endl;
-    }
-}
-'''
 
 if __name__ == '__main__':
-    todo('http://172.22.27.1', operator_login, username='Your username', password='Your password')
-    for i in range(2):
-        todo('http://172.22.27.1/submit', operator_submit, problem='1000', lang='2', code=CODE)
-        time.sleep(0.5)
+    SimuateAPI.chPathToThis(__file__)
+    data = SimuateAPI.getData()
+    robot = SimuateAPI.load()
+    SimuateAPI.todo(robot, 'http://172.22.27.1', operator_login, username=data['username'], password=data['password'])
+    time.sleep(0.2)
+    SimuateAPI.todo(robot, 'http://172.22.27.1/submit', operator_submit, problem=data['problem'], lang=data['lang'], code=data['code'])
