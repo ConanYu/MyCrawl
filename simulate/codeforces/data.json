@@ -1,0 +1,10 @@
+{
+    "username": "username",
+    "password": "password",
+    "friends": [
+        "name1",
+        "name2"
+    ],
+    "command_executor": null,
+    "session_id": null
+}
