@@ -1,30 +1,57 @@
 import os
 import time
+import json
 from getpass import getpass
 import requests
-from lxml import etree
 import selenium
 from selenium import webdriver
-robot, session = None, None
+robot = None
+
+# --------------------------------------------------------------------------------------------
+# reuseChrome.py
+from selenium.webdriver import Remote
+from selenium.webdriver.chrome import options
+from selenium.common.exceptions import InvalidArgumentException
+
+class ReuseChrome(Remote):
+
+    def __init__(self, command_executor, session_id):
+        self.r_session_id = session_id
+        Remote.__init__(self, command_executor=command_executor, desired_capabilities={})
+
+    def start_session(self, capabilities, browser_profile=None):
+        # 重写start_session方法
+        if not isinstance(capabilities, dict):
+            raise InvalidArgumentException("Capabilities must be a dictionary")
+        if browser_profile:
+            if "moz:firefoxOptions" in capabilities:
+                capabilities["moz:firefoxOptions"]["profile"] = browser_profile.encoded
+            else:
+                capabilities.update({'firefox_profile': browser_profile.encoded})
+
+        self.capabilities = options.Options().to_capabilities()
+        self.session_id = self.r_session_id
+        self.w3c = False
+# --------------------------------------------------------------------------------------------
+
+def chPathToThis(f=None):
+    f = __file__ if f is None else f
+    os.chdir(os.path.dirname(f))
 
 def todo(url, operator, **kw):
-    global robot, session
-    if robot is None or session is None:
-        robot = webdriver.Chrome(executable_path=r'D:\Desktop\chromedriver.exe')
-        session = requests.Session()
-        robot.implicitly_wait(2.0)
+    global robot
     robot.get(url)
     operator(kw)
-    cookies = robot.get_cookies()
-    for cookie in cookies:
-        session.cookies.set(cookie['name'], cookie['value'])
 
 def operator_login(kw):
     global robot
     # url = 'http://codeforces.com/enter'
-    robot.find_element_by_xpath('//*[@id="handleOrEmail"]').send_keys(kw['username'])
-    robot.find_element_by_xpath('//*[@id="password"]').send_keys(kw['password'])
-    robot.find_element_by_xpath('//*[@id="enterForm"]/table/tbody/tr[4]/td/div[1]/input').click()
+    try:
+        robot.find_element_by_xpath('//*[@id="handleOrEmail"]').send_keys(kw['username'])
+        robot.find_element_by_xpath('//*[@id="password"]').send_keys(kw['password'])
+        robot.find_element_by_xpath('//*[@id="enterForm"]/table/tbody/tr[4]/td/div[1]/input').click()
+    except selenium.common.exceptions.NoSuchElementException:
+        print('登录失败，可能已经登陆。')
 
 def operator_makefriend(kw):
     global robot
@@ -32,8 +59,6 @@ def operator_makefriend(kw):
     robot.find_element_by_xpath('//*[@id="pageContent"]/div[2]/div[5]/div[2]/div/h1/img[@class="addFriend friendStar" or class="friendStar addFriend"]').click()
     
 def makefriend(username, password, friends):
-    if isinstance(friends, str):
-        friends = [friends]
     todo('http://codeforces.com/enter', operator_login, username=username, password=password)
     time.sleep(4.0)
     for i in friends:
@@ -42,11 +67,17 @@ def makefriend(username, password, friends):
         except selenium.common.exceptions.NoSuchElementException:
             print(i + ' 添加失败。')
 
+
 if __name__ == '__main__':
-    username = input('输入用户名； ')
-    password = getpass('输入密码： ')
-    n = int(input('你要添加几个朋友？ '))
-    lis = []
-    for i in range(1, n + 1):
-        lis.append(input('输入第%d个朋友的用户名： ' % i))
-    makefriend(username, password, lis)
+    data = None
+    chPathToThis()
+    with open('data.json', 'r') as read_file:
+        data = json.load(read_file)
+    command_executor, session_id = data.get('command_executor', None), data.get('session_id', None)
+    if command_executor is None or session_id is None:
+        robot = webdriver.Chrome(executable_path=r'D:\Desktop\chromedriver.exe')
+    else:
+        robot = ReuseChrome(command_executor, session_id)
+    with open('last.log', 'w') as dump_file:
+        dump_file.write('robot.command_executor: ' + robot.command_executor._url + '\nrobot.session_id: ' + robot.session_id)
+    makefriend(data['username'], data['password'], data['friends'])
