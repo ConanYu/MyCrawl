@@ -16,7 +16,9 @@ int main()
     }
     return 0;
 }
-"""
+""",
+    "command_executor": None,
+    "session_id": None
 }
 
 with open('data.json', 'w') as dump_f:
