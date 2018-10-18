@@ -8,6 +8,7 @@ def todo(url, operator, **kw):
     operator(kw)
 
 def load(command_executor=None, session_id=None):
+    global robot
     if command_executor is None or session_id is None:
         robot = webdriver.Chrome(executable_path=r'D:\Desktop\chromedriver.exe')
     else:
