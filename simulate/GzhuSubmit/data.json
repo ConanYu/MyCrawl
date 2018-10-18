@@ -3,5 +3,7 @@
     "password": "password",
     "problem": "1000",
     "lang": "1",
-    "code": "#include<stdio.h>\nint main()\n{\n    int a, b;\n    while(~scanf(\"%d %d\", &a, &b))\n    {\n        printf(\"%d\\n\", a + b);\n    }\n    return 0;\n}\n"
+    "code": "#include<stdio.h>\nint main()\n{\n    int a, b;\n    while(~scanf(\"%d %d\", &a, &b))\n    {\n        printf(\"%d\\n\", a + b);\n    }\n    return 0;\n}\n",
+    "command_executor": null,
+    "session_id": null
 }
