@@ -1,7 +1,10 @@
-import SimuateAPI
 import time
 import json
 from selenium.webdriver.support.ui import Select
+import os
+import sys
+sys.path.append(os.path.dirname(__file__) + r'\..')
+import SimuateAPI
 
 def operator_login(kw):
     # url: http://172.22.27.1/
@@ -22,7 +25,7 @@ def operator_submit(kw):
 
 if __name__ == '__main__':
     SimuateAPI.chPathToThis(__file__)
-    data = SimuateAPI.getData()
+    data = SimuateAPI.getData(__file__)
     robot = SimuateAPI.load()
     SimuateAPI.todo(robot, 'http://172.22.27.1', operator_login, username=data['username'], password=data['password'])
     time.sleep(0.2)
