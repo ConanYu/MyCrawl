@@ -1,6 +1,10 @@
-import SimuateAPI
 import selenium
 import time
+import sys
+import os
+import sys
+sys.path.append(os.path.dirname(__file__) + r'\..')
+import SimuateAPI
 
 def operator_login(kw):
     # url = 'http://codeforces.com/enter'
@@ -16,8 +20,8 @@ def operator_makefriend(kw):
     robot.find_element_by_xpath('//*[@id="pageContent"]/div[2]/div[5]/div[2]/div/h1/img[@class="addFriend friendStar" or class="friendStar addFriend"]').click()
 
 if __name__ == '__main__':
-    SimuateAPI.chPathToThis()
-    data = SimuateAPI.getData()
+    SimuateAPI.chPathToThis(__file__)
+    data = SimuateAPI.getData(__file__)
     robot = SimuateAPI.load(data['command_executor'], data['session_id'])
     SimuateAPI.todo(robot, 'http://codeforces.com/enter', operator_login, username=data['username'], password=data['password'])
     time.sleep(4.0)
