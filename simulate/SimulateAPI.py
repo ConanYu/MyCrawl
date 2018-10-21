@@ -5,6 +5,7 @@ Author: ConanYu
 # --------------------------------------------------------------------------------------------
 # 作用： 重用webdriver
 # 用法： robot = ReuseChrome(command_executor, session_id)
+import selenium
 from selenium import webdriver
 from selenium.webdriver import Remote
 from selenium.webdriver.chrome import options
@@ -84,10 +85,12 @@ def chPathToThis(f=None):
 # --------------------------------------------------------------------------------------------
 # 读取data.json
 import json
-def getData():
-    chPathToThis(__file__)
+def getData(f=None):
+    f = __file__ if f is None else f
+    chPathToThis(f)
     with open('data.json', 'r') as read_file:
         data = json.load(read_file)
     return data
 
 # --------------------------------------------------------------------------------------------
+# robot.page_source 获取源码
