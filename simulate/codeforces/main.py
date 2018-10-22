@@ -3,11 +3,13 @@ import time
 import sys
 import os
 import sys
-sys.path.append(os.path.dirname(__file__) + r'\..')
+THIS_PATH = os.path.dirname(__file__)
+sys.path.append(THIS_PATH + r'\..')
 import SimuateAPI
+robot = None
 
-def operator_login(kw):
-    # url = 'http://codeforces.com/enter'
+@SimuateAPI.todo
+def operator_login(**kw):
     try:
         robot.find_element_by_xpath('//*[@id="handleOrEmail"]').send_keys(kw['username'])
         robot.find_element_by_xpath('//*[@id="password"]').send_keys(kw['password'])
@@ -15,7 +17,8 @@ def operator_login(kw):
     except selenium.common.exceptions.NoSuchElementException:
         print('登录失败，可能已经登陆。')
 
-def operator_makefriend(kw):
+@SimuateAPI.todo
+def operator_makefriend(**kw):
     # url = 'http://codeforces.com/profile/用户名'
     robot.find_element_by_xpath('//*[@id="pageContent"]/div[2]/div[5]/div[2]/div/h1/img[@class="addFriend friendStar" or class="friendStar addFriend"]').click()
 
@@ -23,10 +26,11 @@ if __name__ == '__main__':
     SimuateAPI.chPathToThis(__file__)
     data = SimuateAPI.getData(__file__)
     robot = SimuateAPI.load(data['command_executor'], data['session_id'])
-    SimuateAPI.todo(robot, 'http://codeforces.com/enter', operator_login, username=data['username'], password=data['password'])
+    print(robot)
+    operator_login(robot, url='http://codeforces.com/enter', username=data['username'], password=data['password'])
     time.sleep(4.0)
     for i in data['friends']:
         try:
-            SimuateAPI.todo(robot, 'http://codeforces.com/profile/' + i, operator_makefriend)
+            operator_makefriend(robot, url=('http://codeforces.com/profile/' + i))
         except selenium.common.exceptions.NoSuchElementException:
             print(i + ' 添加失败。')
