@@ -55,14 +55,36 @@ def load(command_executor=None, session_id=None):
 # --------------------------------------------------------------------------------------------
 # 作用：使webdriver转到某个url并执行某些操作
 # 用法：operator指的是某个操作函数，kw里面是操作所需要的数据
-def todo(robot, url, operator, **kw):
-    robot.get(url)
-    operator(kw)
+
+
+def todo(func):
+    def wrapper(robot, *args, **kw):
+        try:
+            URL = kw['url']
+        except KeyError:
+            pass
+        else:
+            robot.get(URL)
+        return func(*args, **kw)
+    return wrapper
+
+# def todo(robot):
+#     def in_todo(func):
+#         def wrapper(*args, **kw):
+#             try:
+#                 URL = kw['url']
+#             except KeyError:
+#                 pass
+#             else:
+#                 robot.get(URL)
+#             return func(*args, **kw)
+#         return wrapper
+#     return in_todo
 
 """
 operator函数示例：
-无论有无数据输入输出都要有一个参数
-def operator_makefriend(kw):
+无论有无数据输入都要有一个参数**kw
+def operator_makefriend(**kw):
     global robot
     # url = 'http://codeforces.com/profile/用户名'
     robot.find_element_by_xpath('//*[@id="pageContent"]/div[2]/div[5]/div[2]/div/h1/img[@class="addFriend friendStar" or class="friendStar addFriend"]').click()
