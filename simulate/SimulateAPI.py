@@ -70,9 +70,15 @@ def toUrl(url):
 from selenium.webdriver.support.ui import Select
 
 def todo(xpath, operator, *args):
+
     def getElementByXpath(path):
         return 'document.evaluate(\'' + path + '\', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue'
     
+    def check():
+        if operator in {'select_by_value', 'send_keys'} and len(args) != 1:
+            raise TypeError('select_by_value takes 1 arguments but ' + str(len(args)) + ' was given')
+
+    check()
     global robot
     if 'select_by_value' == operator:
         eval('Select(robot.find_element_by_xpath(\'' + xpath + '\')).select_by_value(' + ', '.join(('args[' + str(e) + ']') for e in range(len(args))) + ')')
