@@ -2,6 +2,8 @@
 Author: ConanYu
 """
 
+robot = None
+
 # --------------------------------------------------------------------------------------------
 # 作用： 重用webdriver
 # 用法： robot = ReuseChrome(command_executor, session_id)
@@ -33,7 +35,7 @@ class ReuseChrome(Remote):
 
 # --------------------------------------------------------------------------------------------
 
-
+import time
 
 # --------------------------------------------------------------------------------------------
 # 作用：返回一个webdriver对象，若有command_executor和session_id时重用webdriver
@@ -41,54 +43,38 @@ class ReuseChrome(Remote):
 # 不需要重用时： robot = load()
 
 def load(command_executor=None, session_id=None):
-    robot = None
+    global robot
     if command_executor is None or session_id is None:
         robot = webdriver.Chrome(executable_path=r'D:\Desktop\chromedriver.exe') # webdriver's path
     else:
         robot = ReuseChrome(command_executor, session_id)
-    with open('last.log', 'w') as dump_file:
-        dump_file.write('robot.command_executor: ' + robot.command_executor._url + '\nrobot.session_id: ' + robot.session_id)
+    with open('last.log', 'a') as dump_file:
+        dump_file.write('time: ' + str(time.time()) + '\nrobot.command_executor: ' + robot.command_executor._url + '\nrobot.session_id: ' + robot.session_id + '\n\n')
     return robot
 
 # --------------------------------------------------------------------------------------------
 
 # --------------------------------------------------------------------------------------------
-# 作用：使webdriver转到某个url并执行某些操作
-# 用法：operator指的是某个操作函数，kw里面是操作所需要的数据
+# 作用：使webdriver转到某个url中
 
-
-def todo(func):
-    def wrapper(robot, *args, **kw):
-        try:
-            URL = kw['url']
-        except KeyError:
-            pass
-        else:
-            robot.get(URL)
-        return func(*args, **kw)
-    return wrapper
-
-# def todo(robot):
-#     def in_todo(func):
-#         def wrapper(*args, **kw):
-#             try:
-#                 URL = kw['url']
-#             except KeyError:
-#                 pass
-#             else:
-#                 robot.get(URL)
-#             return func(*args, **kw)
-#         return wrapper
-#     return in_todo
-
-"""
-operator函数示例：
-无论有无数据输入都要有一个参数**kw
-def operator_makefriend(**kw):
+def toUrl(url):
     global robot
-    # url = 'http://codeforces.com/profile/用户名'
-    robot.find_element_by_xpath('//*[@id="pageContent"]/div[2]/div[5]/div[2]/div/h1/img[@class="addFriend friendStar" or class="friendStar addFriend"]').click()
-"""
+    time.sleep(0.1)
+    robot.get(url)
+
+# --------------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------------------------
+# 作用：执行某些操作
+
+from selenium.webdriver.support.ui import Select
+
+def todo(xpath, operator, *args):
+    global robot
+    if 'select_by_value' == operator:
+        eval('Select(robot.find_element_by_xpath(\'' + xpath + '\')).select_by_value(' + ', '.join(('args[' + str(e) + ']') for e in range(len(args))) + ')')
+    else:
+        eval('robot.find_element_by_xpath(\'' + xpath + '\').' + operator + '(' + ', '.join(('args[' + str(e) + ']') for e in range(len(args))) + ')')
 
 # --------------------------------------------------------------------------------------------
 
@@ -107,10 +93,8 @@ def chPathToThis(f=None):
 # --------------------------------------------------------------------------------------------
 # 读取data.json
 import json
-def getData(f=None):
-    f = __file__ if f is None else f
-    chPathToThis(f)
-    with open('data.json', 'r') as read_file:
+def getData(f):
+    with open(f, 'r') as read_file:
         data = json.load(read_file)
     return data
 
