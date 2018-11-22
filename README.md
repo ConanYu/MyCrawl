@@ -11,8 +11,9 @@
 
 | 名称 | 时间 |
 |-|-|
-| <center>[GzhuOJ模拟登陆并上传代码](https://github.com/ConanYu/MyCrawl/tree/master/simulate/GzhuOJ)</center> | 2018-10-12 |
+| <center>[GzhuOJ模拟登陆并上传代码](https://github.com/ConanYu/MyCrawl/tree/master/simulate/GzhuSubmit)</center> | 2018-10-12 |
 | <center>[Codeforces一键makefriends](https://github.com/ConanYu/MyCrawl/tree/master/simulate/codeforces)</center> | 2018-10-13 |
+| <center>[GzhuOJ一键变成rk1](https://github.com/ConanYu/MyCrawl/tree/master/simulate/GzhuSubmitB)</center>| 2018-11-10 |
  
 #
 > 喜欢的话就坚持吧。
